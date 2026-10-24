@@ -1,0 +1,17 @@
+# Dataset
+cifar-10-python.tar.gz
+cifar-10-batches-py/
+
+# Python environments and cache
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Secrets
+.env
+.env.*
+!.env.example
