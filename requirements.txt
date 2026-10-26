@@ -1,0 +1,11 @@
+# Original project dependencies
+tensorflow>=2.20,<3
+numpy
+matplotlib
+pandas
+scikit-learn
+
+# Added for the Streamlit app
+streamlit>=1.55
+pillow>=10.0
+plotly>=5.24
