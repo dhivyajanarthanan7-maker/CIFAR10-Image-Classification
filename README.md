@@ -1,96 +1,87 @@
-# CIFAR-10 Image Classification Using CNNs
+# CIFAR-10 Image Classification with Streamlit
 
-## Project Overview
+An interactive image-classification app that compares two TensorFlow/Keras CNN models trained on the CIFAR-10 dataset. Upload an image to see the models' predictions, confidence scores, and top-3 classes side by side.
 
-This project implements and compares two deep learning models for classifying images from the CIFAR-10 dataset using TensorFlow and Keras.
+## Streamlit App Preview
 
-The baseline model is a CNN built from scratch. The second model incorporates a residual block to investigate whether a shortcut connection improves classification performance.
+![Streamlit CIFAR-10 image prediction and model comparison](screenshots/streamlit-demo.png)
 
-## Dataset
+*Example: the uploaded airplane image is classified by both models. Confidence scores can differ substantially between models.*
 
-- Dataset: CIFAR-10
-- Training images: 50,000
-- Test images: 10,000
-- Image dimensions: 32 × 32 × 3
-- Number of classes: 10
+## Models and Results
 
-Classes: airplane, automobile, bird, cat, deer, dog, frog, horse, ship, and truck.
+| Model | Description | Test accuracy |
+|---|---|---:|
+| Baseline CNN | Convolution, batch normalization, ReLU, pooling, dropout, and dense classification layers | **75.24%** |
+| Residual CNN | Convolutional stem with a residual block and identity shortcut | 58.96% |
 
-A validation set of 5,000 images was separated from the original training data, leaving 45,000 images for training.
+In this experiment, the baseline CNN performed better. The residual model's result suggests that its architecture and training settings need further investigation; a residual connection alone does not guarantee better accuracy.
 
-## Project Structure
+## Features
+
+- Upload PNG, JPG, JPEG, WebP, or BMP images.
+- Run the saved Baseline CNN, Residual CNN, or both models.
+- View predicted class, confidence score, and top-3 predictions.
+- Compare predictions side by side and see when the models disagree.
+- Preview the image resized to the model's 32 × 32 input size.
+- Explore all 10 class probabilities.
+- Optionally evaluate models on CIFAR-10 test images when the dataset is available.
+
+## CIFAR-10 Classes
+
+Airplane, automobile, bird, cat, deer, dog, frog, horse, ship, and truck.
+
+## Project Files
 
 ```text
-CIFAR10_Image_Classification/
+Image_classification/
+├── app.py
+├── cifar_utils.py
 ├── CIFAR10_Image_Classification.ipynb
 ├── baseline_cnn.keras
 ├── residual_cnn.keras
 ├── requirements.txt
-└── README.md
+├── README.md
+└── screenshots/
+    └── streamlit-demo.png
 ```
 
-## Data Pipeline
+## Run Locally
 
-- Normalized image pixel values to the range 0–1.
-- Applied data augmentation to training images.
-- Used batches of 128 images.
-- Used shuffling and prefetching for efficient data loading.
-- Kept the official test dataset separate from training and validation.
-
-## Model Architecture
-
-### Baseline CNN
-
-The baseline CNN includes:
-- Convolutional layers
-- Batch Normalization
-- ReLU activation
-- Max Pooling
-- Dropout
-- Dense classification layers
-- Softmax output with 10 classes
-
-### Residual CNN
-
-The second model incorporates a residual block with a shortcut connection that adds the input to the convolutional block output.
-
-Both models were trained using the Adam optimizer and sparse categorical cross-entropy loss. Learning-rate reduction, checkpoint saving, and early stopping were used during training.
-
-## Experimental Results
-
-| Metric | Baseline CNN | Residual CNN |
-|---|---:|---:|
-| Best validation accuracy | 76.12% | 58.66% |
-| Test accuracy | 75.24% | 58.96% |
-| Test loss | 0.7104 | 1.2403 |
-
-The baseline CNN achieved 75.24% test accuracy. The residual CNN achieved 58.96% test accuracy under the current architecture and training settings.
-
-The residual block did not improve performance in this experiment. Further investigation of architecture design, model capacity, regularization, and training settings may help improve the result.
-
-## How to Run
-
-1. Open `CIFAR10_Image_Classification.ipynb` in Google Colab.
-2. Select **Runtime → Change runtime type → T4 GPU**, if available.
-3. Run the notebook cells in order.
-4. The notebook downloads and preprocesses CIFAR-10, builds both models, trains them, plots learning curves, and evaluates performance.
-
-Install dependencies in a compatible Python environment with:
+Use a compatible Python version and run these commands in the project folder:
 
 ```bash
-pip install -r requirements.txt
+python -m venv .venv
 ```
 
-## Reproducibility
+Activate the environment on Windows PowerShell:
 
-The notebook sets random seeds for reproducible experiments. Exact results may vary with software versions, hardware, and execution settings.
+```powershell
+.venv\Scripts\Activate.ps1
+```
 
-## Limitations and Future Improvements
+Install dependencies and launch Streamlit:
 
-- The residual model performed worse than the baseline in this experiment.
-- The architecture and training hyperparameters could be tuned further.
-- Additional experiments could investigate stronger residual architectures, learning rates, batch sizes, and regularization.
+```bash
+python -m pip install -r requirements.txt
+python -m streamlit run app.py
+```
+
+Open `http://localhost:8501` in your browser. The app loads the saved `.keras` models and does not retrain them.
+
+## Preprocessing and Confidence Notes
+
+The models were trained on 32 × 32 RGB images with pixel values scaled to the range 0–1. Uploaded images are converted to RGB and resized according to the selected app setting. Large images can lose visual detail when reduced to 32 × 32.
+
+The model always selects among the 10 CIFAR-10 classes, even if an uploaded image does not belong to one of them. Softmax confidence is a model score and does not guarantee that a prediction is correct.
 
 ## Technologies
 
-Python, TensorFlow, Keras, NumPy, Matplotlib, Pandas, and Google Colab.
+Python, TensorFlow, Keras, NumPy, Matplotlib, and Streamlit.
+
+## Future Improvements
+
+- Train a deeper residual network for more epochs.
+- Tune learning rate, regularization, and batch size.
+- Add model calibration and a more robust out-of-distribution warning.
+- Track inference latency across different hardware.
