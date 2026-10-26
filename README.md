@@ -4,7 +4,7 @@ An interactive image-classification app that compares two TensorFlow/Keras CNN m
 
 ## Streamlit App Preview
 
-![Streamlit CIFAR-10 image prediction and model comparison](screenshots/streamlit-demo.png)
+![Streamlit CIFAR-10 image prediction and model comparison](streamlit-demo.png)
 
 *Example: the uploaded airplane image is classified by both models. Confidence scores can differ substantially between models.*
 
